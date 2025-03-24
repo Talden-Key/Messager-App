@@ -37,4 +37,24 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-module.exports = router;
+// Logout & JWT Middleware
+const protect = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1]; // "Bearer <token>"
+
+  if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // { id: user._id }
+    next();
+  } catch (err) {
+    res.status(401).json({ message: 'Token is not valid' });
+  }
+};
+// POST /api/auth/logout
+router.post('/logout', (req, res) => {
+    // Just send a response for now; client will clear token
+    res.status(200).json({ message: 'User logged out successfully' });
+  });
+
+  module.exports = { router, protect };

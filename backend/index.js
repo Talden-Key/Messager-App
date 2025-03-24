@@ -29,5 +29,5 @@ app.listen(PORT, () => {
   console.log(`🚀 Server started on port ${PORT}`);
 });
 
-const authRoutes = require('./routes/auth');
+const { router: authRoutes } = require('./routes/auth');
 app.use('/api/auth', authRoutes);
